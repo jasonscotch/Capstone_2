@@ -8,7 +8,7 @@ import Inventory from './Inventory';
 import GoldSection from './Gold';
 import Provisions from './Provisions';
 
-const AdventureSheet = ({ characterName, inventoryItems, setInventoryItems, gold, setGold, stamina, setStamina, originalStamina, setOriginalStamina, skill, setSkill, originalSkill, setOriginalSkill, luck, setLuck, originalLuck, setOriginalLuck, diceResult, setDiceResult }) => {
+const AdventureSheet = ({ characterName, inventoryItems, setInventoryItems, gold, setGold, stamina, setStamina, originalStamina, setOriginalStamina, skill, setSkill, originalSkill, setOriginalSkill, luck, setLuck, originalLuck, setOriginalLuck, diceResult, setDiceResult, remainingProvisions, setRemainingProvisions, initialStaminalInputDone, setInitialStaminaInputDone, initialLuckInputDone, setInitialLuckInputDone, initialSkillInputDone, setInitialSkillInputDone }) => {
 
   useEffect(() => {
     // Save data to the database on each update
@@ -22,23 +22,29 @@ const AdventureSheet = ({ characterName, inventoryItems, setInventoryItems, gold
   return (
     <div>
       <h2>Adventure Sheet - {characterName}</h2>
+      <SkillSection 
+        skill={skill} 
+        setSkill={setSkill}
+        originalSkill={originalSkill}
+        setOriginalSkill={setOriginalSkill}
+        setInitialSkillInputDone={setInitialSkillInputDone}
+        initialSkillInputDone={initialSkillInputDone} 
+      />
       <StaminaSection 
         stamina={stamina} 
         setStamina={setStamina} 
         originalStamina={originalStamina}
         setOriginalStamina={setOriginalStamina} 
-      />
-      <SkillSection 
-        skill={skill} 
-        setSkill={setSkill}
-        originalSkill={originalSkill}
-        setOriginalSkill={setOriginalSkill} 
+        setInitialStaminaInputDone={setInitialStaminaInputDone}
+        initialStaminalInputDone={initialStaminalInputDone}
       />
       <LuckSection 
         luck={luck} 
         setLuck={setLuck} 
         originalLuck={originalLuck}
         setOriginalLuck={setOriginalLuck}
+        setInitialLuckInputDone={setInitialLuckInputDone}
+        initialLuckInputDone={initialLuckInputDone}
       />
       <DiceRoll 
         diceResult={diceResult}
@@ -56,6 +62,8 @@ const AdventureSheet = ({ characterName, inventoryItems, setInventoryItems, gold
         originalStamina={originalStamina}
         stamina={stamina}
         setStamina={setStamina} 
+        remainingProvisions={remainingProvisions}
+        setRemainingProvisions={setRemainingProvisions}
       />
     </div>
   );

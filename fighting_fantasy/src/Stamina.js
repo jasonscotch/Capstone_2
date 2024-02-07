@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
-const StaminaSection = ({ stamina, setStamina, originalStamina, setOriginalStamina }) => {
-    const [initialInputDone, setInitialInputDone] = useState(false);
+const StaminaSection = ({ stamina, setStamina, originalStamina, setOriginalStamina, initialStaminalInputDone, setInitialStaminaInputDone }) => {
 
     const handleIncrease = () => {
         setStamina(stamina + 1);
@@ -17,13 +16,13 @@ const StaminaSection = ({ stamina, setStamina, originalStamina, setOriginalStami
     };
 
     const handleInputSubmit = () => {
-        setInitialInputDone(true);
+        setInitialStaminaInputDone(true);
         setStamina(originalStamina); // Set current stamina to original stamina initially
     };
 
     return (
         <div>
-        {!initialInputDone && (
+        {!initialStaminalInputDone && (
             <div>
             <label>
                 Original Stamina: 
@@ -36,7 +35,7 @@ const StaminaSection = ({ stamina, setStamina, originalStamina, setOriginalStami
             <button onClick={handleInputSubmit}>Submit Initial Stamina</button>
             </div>
         )}
-        {initialInputDone && (
+        {initialStaminalInputDone && (
             <div>
             <h3>Current Stamina: {stamina}</h3>
             <p>Stamina Level: {originalStamina}</p>

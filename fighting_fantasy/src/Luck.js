@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
-const LuckSection = ({ luck, setLuck, originalLuck, setOriginalLuck }) => {
-  const [initialInputDone, setInitialInputDone] = useState(false);
+const LuckSection = ({ luck, setLuck, originalLuck, setOriginalLuck, initialLuckInputDone, setInitialLuckInputDone }) => {
 
   const handleIncrease = () => {
     setLuck(luck + 1);
@@ -17,13 +16,13 @@ const LuckSection = ({ luck, setLuck, originalLuck, setOriginalLuck }) => {
   };
 
   const handleInputSubmit = () => {
-    setInitialInputDone(true);
+    setInitialLuckInputDone(true);
     setLuck(originalLuck);
   };
 
   return (
     <div>
-      {!initialInputDone && (
+      {!initialLuckInputDone && (
         <div>
           <label>
             Original Luck: 
@@ -36,7 +35,7 @@ const LuckSection = ({ luck, setLuck, originalLuck, setOriginalLuck }) => {
           <button onClick={handleInputSubmit}>Submit Initial Luck</button>
         </div>
       )}
-      {initialInputDone && (
+      {initialLuckInputDone && (
         <div>
           <h3>Current Luck: {luck}</h3>
           <p>Luck Level: {originalLuck}</p>

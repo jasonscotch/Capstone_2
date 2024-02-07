@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
-const Provisions = ({ originalStamina, stamina, setStamina }) => {
-  const [remainingProvisions, setRemainingProvisions] = useState(10);
+const Provisions = ({ originalStamina, stamina, setStamina, remainingProvisions, setRemainingProvisions }) => {
 
   const handleUseProvision = () => {
     if (remainingProvisions > 0) {

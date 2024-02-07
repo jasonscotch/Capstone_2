@@ -7,7 +7,8 @@ const Inventory = ({ inventoryItems, setInventoryItems }) => {
 
   const addItem = () => {
     if (newItem.trim() !== '') {
-      setInventoryItems([...inventoryItems, newItem]);
+      const newItemObject = { item_name: newItem, effect_name: 'normal' };
+      setInventoryItems([...inventoryItems, newItemObject]);
       setNewItem('');
     }
   };
@@ -29,7 +30,7 @@ const Inventory = ({ inventoryItems, setInventoryItems }) => {
               editItem(index, editedValue);
             }
           }}>
-            {item.item_name} - {item.effect_name}
+            {item.item_name} - {item.description || item.effect_name}
           </li>
         ))}
       </ul>

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
-const SkillSection = ({ skill, setSkill, originalSkill, setOriginalSkill }) => {
-  const [initialInputDone, setInitialInputDone] = useState(false);
+const SkillSection = ({ skill, setSkill, originalSkill, setOriginalSkill, initialSkillInputDone, setInitialSkillInputDone }) => {
 
   const handleIncrease = () => {
     setSkill(skill + 1);
@@ -17,13 +16,13 @@ const SkillSection = ({ skill, setSkill, originalSkill, setOriginalSkill }) => {
   };
 
   const handleInputSubmit = () => {
-    setInitialInputDone(true);
+    setInitialSkillInputDone(true);
     setSkill(originalSkill);
   };
 
   return (
     <div>
-      {!initialInputDone && (
+      {!initialSkillInputDone && (
         <div>
           <label>
             Original Skill: 
@@ -36,7 +35,7 @@ const SkillSection = ({ skill, setSkill, originalSkill, setOriginalSkill }) => {
           <button onClick={handleInputSubmit}>Submit Initial Skill</button>
         </div>
       )}
-      {initialInputDone && (
+      {initialSkillInputDone && (
         <div>
           <h3>Current Skill: {skill}</h3>
           <p>Skill Level: {originalSkill}</p>

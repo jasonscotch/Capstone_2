@@ -1,10 +1,12 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './DeathPopup.css';
 
 const DeathPopup = () => {
+  const navigate = useNavigate();
     const handleClose = () => {
         // Redirect to the homepage
-        window.location.href = '/';
+        navigate('/');
       };
     
   
