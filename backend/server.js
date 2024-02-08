@@ -60,7 +60,7 @@ const authenticateUser = async (req, res, next) => {
 // API Routes
 
 // User endpoints
-app.post('/register', async (req, res, next) => {
+app.post('/sign-up', async (req, res, next) => {
   try {
     const { username, password } = req.body;
 
@@ -218,17 +218,17 @@ app.get('/load-progress', authenticateUser, async function(req, res, next) {
   }
 });
 
-app.delete('/delete-progress/progressId', authenticateUser, async function(req, res, next) {
+app.delete('/delete-progress/:progressId', authenticateUser, async function(req, res, next) {
   try {
     const { progressId } = req.params;
 
     // Check if the user owns the saved game (progressId) before deleting
     const result = await pool.query(
-      'DELETE FROM user_progress WHERE id = $1 AND user_id = $2 RETURNING id',
+      'DELETE FROM user_progress WHERE id = $1 AND user_id = $2 RETURNING id, save_name',
       [progressId, req.user.userId]
     );
 
-    if (result.rows.length === 0) {
+    if (result.rows.length !== 1) {
       return res.status(404).json({ error: 'Saved game not found or unauthorized to delete.' });
     }
 

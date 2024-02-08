@@ -21,26 +21,31 @@ const StaminaSection = ({ stamina, setStamina, originalStamina, setOriginalStami
     };
 
     return (
-        <div>
+        <div className='rpgui-container framed-golden'>
         {!initialStaminalInputDone && (
-            <div>
+            <div className='main-game-stats'>
             <label>
-                Original Stamina: 
+                Stamina: 
                 <input
                 type="number"
                 value={originalStamina}
                 onChange={(e) => handleInputChange(e)}
                 />
+                <button onClick={handleInputSubmit}> > </button>
             </label>
-            <button onClick={handleInputSubmit}>Submit Initial Stamina</button>
+            
             </div>
         )}
         {initialStaminalInputDone && (
-            <div>
-            <h3>Current Stamina: {stamina}</h3>
-            <p>Stamina Level: {originalStamina}</p>
-            <button onClick={handleIncrease} disabled={stamina === originalStamina}>Increase Stamina</button>
-            <button onClick={handleDecrease} disabled={stamina === 0}>Decrease Stamina</button>
+            <div className='main-game-stats-2'>
+                <h2>Stamina</h2>
+                <h1>{stamina}</h1>
+                {/* <br></br>
+                <h4>Original Stamina: {originalStamina}</h4> */}
+                <div>
+                    <button onClick={handleDecrease} disabled={stamina === 0}>-</button>
+                    <button onClick={handleIncrease} disabled={stamina === originalStamina}>+</button>
+                </div>
             </div>
         )}
         </div>

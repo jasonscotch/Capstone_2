@@ -4,16 +4,17 @@ import './DeathPopup.css';
 
 const DeathPopup = () => {
   const navigate = useNavigate();
-    const handleClose = () => {
-        // Redirect to the homepage
-        navigate('/');
-      };
+  
+  const handleClose = () => {
+      // Redirect to the homepage
+      navigate('/');
+    };
     
   
     return (
     <div className="popup-container">
       <div className="popup-content">
-        <h2>You have died!</h2>
+        <h2>Your Adventure is over...</h2>
         <button onClick={handleClose}>Close</button>
       </div>
     </div>

@@ -14,10 +14,13 @@ const Provisions = ({ originalStamina, stamina, setStamina, remainingProvisions,
   };
 
   return (
-    <div>
-      <h3>Provisions</h3>
-      <p>Remaining: {remainingProvisions}</p>
+    <div className='rpgui-container framed'>
+      <div className='main-game-stats-2'>
+      <h2>Provisions</h2>
+      <h1>{remainingProvisions}</h1>
+      <br></br>
       <button onClick={handleUseProvision} disabled={stamina === originalStamina}>Use Provision</button>
+    </div>
     </div>
   );
 };

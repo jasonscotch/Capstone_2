@@ -21,26 +21,30 @@ const LuckSection = ({ luck, setLuck, originalLuck, setOriginalLuck, initialLuck
   };
 
   return (
-    <div>
+    <div className='rpgui-container framed-golden'>
       {!initialLuckInputDone && (
-        <div>
+        <div className='main-game-stats'>
           <label>
-            Original Luck: 
+           Luck: 
             <input
               type="number"
               value={originalLuck}
               onChange={handleInputChange}
-            />
+            /><button onClick={handleInputSubmit}> > </button>
           </label>
-          <button onClick={handleInputSubmit}>Submit Initial Luck</button>
+          
         </div>
       )}
       {initialLuckInputDone && (
-        <div>
-          <h3>Current Luck: {luck}</h3>
-          <p>Luck Level: {originalLuck}</p>
-          <button onClick={handleIncrease} disabled={luck === originalLuck}>Increase Luck</button>
-          <button onClick={handleDecrease} disabled={luck === 0}>Decrease Luck</button>
+        <div className='main-game-stats-2'>
+          <h2>Luck</h2>
+          <h1>{luck}</h1>
+          {/* <br></br>
+          <h4>Original Luck: {originalLuck}</h4> */}
+          <div>
+            <button onClick={handleDecrease} disabled={luck === 0}>-</button>
+            <button onClick={handleIncrease} disabled={luck === originalLuck}>+</button>
+          </div>
         </div>
       )}
     </div>

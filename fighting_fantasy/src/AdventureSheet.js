@@ -7,64 +7,115 @@ import DiceRoll from './DiceRoll';
 import Inventory from './Inventory';
 import GoldSection from './Gold';
 import Provisions from './Provisions';
+import { useGame } from "./GameContext";
+import { useAuth } from "./AuthContext";
+import character from './ezgif.com-crop.gif';
 
-const AdventureSheet = ({ characterName, inventoryItems, setInventoryItems, gold, setGold, stamina, setStamina, originalStamina, setOriginalStamina, skill, setSkill, originalSkill, setOriginalSkill, luck, setLuck, originalLuck, setOriginalLuck, diceResult, setDiceResult, remainingProvisions, setRemainingProvisions, initialStaminalInputDone, setInitialStaminaInputDone, initialLuckInputDone, setInitialLuckInputDone, initialSkillInputDone, setInitialSkillInputDone }) => {
+const AdventureSheet = () => {
 
-  useEffect(() => {
-    // Save data to the database on each update
-    saveAdventureSheetData();
-  }, [stamina, skill, luck, gold, originalStamina, inventoryItems ]); 
-  const saveAdventureSheetData = () => {
-    // Implement logic to save data to the database
-    // You can use fetch or axios to make a POST request to your API endpoint
-  };
+  const {
+    loadId,
+    setLoadId,
+    inventoryItems,
+    setInventoryItems,
+    gold,
+    setGold,
+    stamina,
+    setStamina,
+    originalStamina,
+    setOriginalStamina,
+    skill,
+    setSkill,
+    originalSkill,
+    setOriginalSkill,
+    luck,
+    setLuck,
+    originalLuck,
+    setOriginalLuck,
+    enemies,
+    setEnemies,
+    diceResult,
+    setDiceResult,
+    combatRound,
+    setCombatRound,
+    inCombat,
+    setInCombat,
+    remainingProvisions,
+    setRemainingProvisions,
+    initialLuckInputDone,
+    setInitialLuckInputDone,
+    initialSkillInputDone,
+    setInitialSkillInputDone,
+    initialStaminalInputDone,
+    setInitialStaminaInputDone,
+  } = useGame();
+  const { user } = useAuth();
 
   return (
-    <div>
-      <h2>Adventure Sheet - {characterName}</h2>
-      <SkillSection 
-        skill={skill} 
-        setSkill={setSkill}
-        originalSkill={originalSkill}
-        setOriginalSkill={setOriginalSkill}
-        setInitialSkillInputDone={setInitialSkillInputDone}
-        initialSkillInputDone={initialSkillInputDone} 
-      />
-      <StaminaSection 
-        stamina={stamina} 
-        setStamina={setStamina} 
-        originalStamina={originalStamina}
-        setOriginalStamina={setOriginalStamina} 
-        setInitialStaminaInputDone={setInitialStaminaInputDone}
-        initialStaminalInputDone={initialStaminalInputDone}
-      />
-      <LuckSection 
-        luck={luck} 
-        setLuck={setLuck} 
-        originalLuck={originalLuck}
-        setOriginalLuck={setOriginalLuck}
-        setInitialLuckInputDone={setInitialLuckInputDone}
-        initialLuckInputDone={initialLuckInputDone}
-      />
+    <div style={{width: '40%'}}>
+    <div className='rpgui-container framed-golden-2'>
+      <h2>Adventure Sheet - {user.username}</h2>
+      
+      <div className='main-game'>
+        <SkillSection 
+          skill={skill} 
+          setSkill={setSkill}
+          originalSkill={originalSkill}
+          setOriginalSkill={setOriginalSkill}
+          setInitialSkillInputDone={setInitialSkillInputDone}
+          initialSkillInputDone={initialSkillInputDone} 
+        />
+        <StaminaSection 
+          stamina={stamina} 
+          setStamina={setStamina} 
+          originalStamina={originalStamina}
+          setOriginalStamina={setOriginalStamina} 
+          setInitialStaminaInputDone={setInitialStaminaInputDone}
+          initialStaminalInputDone={initialStaminalInputDone}
+        />
+        {/* <div class="rpgui-icon potion-red"></div> */}
+        <LuckSection 
+          luck={luck} 
+          setLuck={setLuck} 
+          originalLuck={originalLuck}
+          setOriginalLuck={setOriginalLuck}
+          setInitialLuckInputDone={setInitialLuckInputDone}
+          initialLuckInputDone={initialLuckInputDone}
+        />
+        
+      </div>
+      <div className='rpgui-container framed'>
       <DiceRoll 
         diceResult={diceResult}
         setDiceResult={setDiceResult}
       />
-      <Inventory 
-        inventoryItems={inventoryItems} 
-        setInventoryItems={setInventoryItems} 
-      />
-      <GoldSection 
-        gold={gold} 
-        setGold={setGold} 
-      />
-      <Provisions 
-        originalStamina={originalStamina}
-        stamina={stamina}
-        setStamina={setStamina} 
-        remainingProvisions={remainingProvisions}
-        setRemainingProvisions={setRemainingProvisions}
-      />
+      </div>
+      <div className='rpgui-container framed-golden'>
+        <Inventory 
+          inventoryItems={inventoryItems} 
+          setInventoryItems={setInventoryItems} 
+        />
+      </div>
+      <div className='main-game-stats'>
+        <div className='rpgui-container framed-2'>
+          <div className='gif'>
+            <img src={character} alt='Character'/>
+          </div>
+        </div>
+        <GoldSection 
+          gold={gold} 
+          setGold={setGold} 
+        />
+        
+        <Provisions 
+          originalStamina={originalStamina}
+          stamina={stamina}
+          setStamina={setStamina} 
+          remainingProvisions={remainingProvisions}
+          setRemainingProvisions={setRemainingProvisions}
+        />
+      </div>
+    </div>
     </div>
   );
 };

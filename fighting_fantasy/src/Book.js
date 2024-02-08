@@ -1,37 +1,76 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect } from 'react';
 import SaveProgress from "./SaveProgress";
 import DeleteProgress from './DeleteProgress';
-import { useLoadGame } from "./LoadGameContext";
+import { useGame } from "./GameContext";
+import { useAuth } from "./AuthContext";
+import { useNavigate } from "react-router-dom";
 
-const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3001";
 
-const Book = ({ inventoryItems, setInventoryItems, gold, setGold, enemies, setEnemies, diceResult, setDiceResult, skill, luck, stamina, originalStamina, originalSkill, originalLuck, setSkill, setStamina, setLuck, setOriginalSkill, setOriginalStamina, setOriginalLuck, combatRound, setCombatRound, inCombat, setInCombat, remainingProvisions, setRemainingProvisions, setInitialStaminaInputDone, setInitialLuckInputDone, setInitialSkillInputDone, loadId, setLoadId }) => {
-  const [data, setData] = useState({});
-  const [items, setItems] = useState([]);
-  const [itemsAvailable, setItemsAvailable] = useState(false);
-  const [disabledButtons, setDisabledButtons] = useState([]);
-  const [showCombatResults, setShowCombatResults] = useState(false);
-  const [fightButton, setFightButton] = useState(false);
-  const [matchingItems, setMatchingItems] = useState([]);
+const Book = () => {
 
-  const { loadSavedGame } = useLoadGame(); 
+  const {
+    loadId,
+    setLoadId,
+    inventoryItems,
+    setInventoryItems,
+    gold,
+    setGold,
+    stamina,
+    setStamina,
+    originalStamina,
+    setOriginalStamina,
+    skill,
+    setSkill,
+    originalSkill,
+    setOriginalSkill,
+    luck,
+    setLuck,
+    originalLuck,
+    setOriginalLuck,
+    enemies,
+    setEnemies,
+    // diceResult,
+    // setDiceResult,
+    combatRound,
+    setCombatRound,
+    inCombat,
+    setInCombat,
+    remainingProvisions,
+    setRemainingProvisions,
+    // initialLuckInputDone,
+    setInitialLuckInputDone,
+    // initialSkillInputDone,
+    setInitialSkillInputDone,
+    // initialStaminalInputDone,
+    setInitialStaminaInputDone,
+    data,
+    setData,
+    items,
+    setItems,
+    itemsAvailable,
+    setItemsAvailable,
+    disabledButtons,
+    setDisabledButtons,
+    showCombatResults,
+    setShowCombatResults,
+    fightButton,
+    setFightButton,
+    matchingItems,
+    setMatchingItems, 
+    LoadSavedGame,
+    fetchData, 
+    progressId
+
+  } = useGame();
+
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const goHome = () => {
+    navigate('/');
+  };
+
   const handleLoadGame = async () => { 
-    await loadSavedGame({
-      setInventoryItems,
-      setGold,
-      setSkill,
-      setStamina,
-      setLuck,
-      setOriginalStamina,
-      setOriginalLuck,
-      setOriginalSkill,
-      setRemainingProvisions,
-      setInitialStaminaInputDone, 
-      setInitialLuckInputDone, 
-      setInitialSkillInputDone,
-      fetchData
-    }); 
+    await LoadSavedGame(); 
   };
 
   const areThereItems = () => {
@@ -43,41 +82,9 @@ const Book = ({ inventoryItems, setInventoryItems, gold, setGold, enemies, setEn
   };
 
   useEffect(() => {
-    fetchData(401);
-    
-  }, []);
-
-  useEffect(() => {
     areThereItems();
     
   }, [items]);
-
-  const fetchData = async (chapterId) => {
-    try {
-      const user = JSON.parse(localStorage.getItem('userData'));
-      
-      const headers = {
-        'Authorization': `Bearer ${user.token}`,
-        'Content-Type': 'application/json',
-      };
-
-      const [storyResult, itemsResult, enemiesResult] = await Promise.all([
-        axios.get(`${BASE_URL}/chapter/${chapterId}`, { headers }),
-        axios.get(`${BASE_URL}/item/${chapterId}`, { headers }),
-        axios.get(`${BASE_URL}/enemy/${chapterId}`, { headers })
-      ]);
-      
-      setData(storyResult.data.length > 0 ? storyResult.data[0] : {});
-      setItems(itemsResult.data.length === 0 || (itemsResult.data[0].item_id === null) ? [] : itemsResult.data);
-      setEnemies(enemiesResult.data[0].monster_id !== null ? enemiesResult.data : []);
-    
-      setInCombat(enemiesResult.data[0].monster_id !== null ? true : false);
-
-    } catch (error) {
-      console.error('Error fetching data', error);
-    }
-  };
-
   
 
   const handleButtonClick = async (choiceNumber) => {
@@ -94,9 +101,10 @@ const Book = ({ inventoryItems, setInventoryItems, gold, setGold, enemies, setEn
         <button 
           key={choiceNumber}
           disabled={inCombat} 
+          className="rpgui-button"
           onClick={() => handleButtonClick(choiceNumber)} 
         >
-          Turn to {choiceValue}
+          <p>Turn to {choiceValue}</p>
         </button>
       )
     );
@@ -141,14 +149,13 @@ const Book = ({ inventoryItems, setInventoryItems, gold, setGold, enemies, setEn
         </p>
         {/* Add logic for rendering 'Take' or 'Buy' button based on cost */}
         {item.cost === 0 ? (
-          <button onClick={() => handleTakeItem(item.item_id)} disabled={disabledButtons.includes(item.item_id)}>Take</button>
+          <button className="rpgui-button" onClick={() => handleTakeItem(item.item_id)} disabled={disabledButtons.includes(item.item_id)}>Take</button>
         ) : (
-          <button onClick={() => handleBuyItem(item.item_id)} disabled={disabledButtons.includes(item.item_id)}>Buy</button>
+          <button className="rpgui-button" onClick={() => handleBuyItem(item.item_id)} disabled={disabledButtons.includes(item.item_id)}>Buy</button>
         )}
       </div>
     ));
   };
-
 
 
   // Fighting Monsters/Enemies
@@ -159,7 +166,6 @@ const Book = ({ inventoryItems, setInventoryItems, gold, setGold, enemies, setEn
     const matchItems = inventoryItems.filter(item => item.monster_category === enemies[0].monster_category);
 
     setMatchingItems(matchItems);
-    // console.log(matchItems);
 
     const playerModifiedAttackStrength = matchingItems.reduce((modifiedStrength, item) => {
       return modifiedStrength + item.effect_amount;
@@ -226,28 +232,28 @@ const Book = ({ inventoryItems, setInventoryItems, gold, setGold, enemies, setEn
     ));
   };
 
-  const gameState = {
-    gold,
-    current_stamina: stamina,
-    original_stamina: originalStamina,
-    current_skill: skill,
-    original_skill: originalSkill,
-    current_luck: luck,
-    original_luck: originalLuck,
-    remaining_provisions: remainingProvisions,
+  // const gameState = {
+  //   gold,
+  //   current_stamina: stamina,
+  //   original_stamina: originalStamina,
+  //   current_skill: skill,
+  //   original_skill: originalSkill,
+  //   current_luck: luck,
+  //   original_luck: originalLuck,
+  //   remaining_provisions: remainingProvisions,
 
-  };
-  // console.log(gameState);
+  // };
   
 
   return (
-    <div>
+    <div style={{width: '60%'}}>
+    <div className='rpgui-container framed' style={{maxHeight: '99vh', overflowY: 'auto' }}>
       <h2>{data.title}</h2>
-      <p>
-        <strong>Chapter: {data.chapter_id}</strong>
-      </p>
+      <button className="rpgui-button golden"><p>Chapter: {data.chapter_id}</p></button>
+
       
       <div dangerouslySetInnerHTML={{ __html: data.text_body }} />
+      <hr className='golden'></hr>
 
       <div>
         {Array.from({ length: 5 }, (_, i) => renderChoiceButton(i + 1))}
@@ -269,20 +275,16 @@ const Book = ({ inventoryItems, setInventoryItems, gold, setGold, enemies, setEn
       )}
 
       {/* Display fight button after combatRound 0 */}
-      {inCombat && <button disabled={fightButton} onClick={() => {setShowCombatResults(true); handleFight();}}>Fight</button>}
+      {inCombat && <button className="rpgui-button" disabled={fightButton} onClick={() => {setShowCombatResults(true); handleFight();}}>Fight</button>}
       
-      <SaveProgress 
-        inCombat={inCombat}
-        storyId={data.story_id}
-        chapterId={data.chapter_id}
-        gameState={gameState}
-        inventory={inventoryItems}
-        itemsAvailable={itemsAvailable}
-        loadId={loadId}
-        setLoadId={setLoadId} 
-      />
-      <button disabled={itemsAvailable} onClick={handleLoadGame}>LOAD</button>
-      <DeleteProgress />
+      <div className="rpgui-right">
+        <button onClick={goHome}>HOME</button>
+        <SaveProgress />
+        <button disabled={itemsAvailable} onClick={handleLoadGame}>LOAD</button>
+        <DeleteProgress progressId={progressId}/>
+      </div>    
+      
+    </div>
     </div>
   );
 };

@@ -13,10 +13,16 @@ const GoldSection = ({ gold, setGold }) => {
   };
 
   return (
-    <div>
-      <h3>Current Gold: {gold}</h3>
-      <button onClick={handleIncrease}>Increase Gold</button>
-      <button onClick={handleDecrease}>Decrease Gold</button>
+    <div className='rpgui-container framed'>
+      <div className='main-game-stats-2'>
+        <h2>Gold</h2>
+        <h1>{gold}</h1>
+        <br></br>
+        <div>
+          <button onClick={handleDecrease}> - </button>
+          <button onClick={handleIncrease}> + </button>
+        </div>
+      </div>
     </div>
   );
 };

@@ -38,9 +38,8 @@ const DiceRoll = ( { diceResult, setDiceResult }) => {
   };
 
   return (
-    <div className='main'>
-      <h3>Dice Section</h3>
-      <p>Result: {diceResult !== null ? diceResult : 'Roll the dice'}</p>
+    <div className='main-game-3'>
+      <h4>Result: {diceResult !== null ? diceResult : 'Roll the dice'}</h4>
       <div className="dice">
         <ol className="die-list even-roll" data-roll="1" id="die-1">
             <li className="die-item" data-side="1">
@@ -63,7 +62,7 @@ const DiceRoll = ( { diceResult, setDiceResult }) => {
             </li>
             <li className="die-item" data-side="5">
                 <span className="dot"></span>
-                <span class="dot"></span>
+                <span className="dot"></span>
                 <span className="dot"></span>
                 <span className="dot"></span>
                 <span className="dot"></span>
@@ -113,8 +112,11 @@ const DiceRoll = ( { diceResult, setDiceResult }) => {
             </li>
         </ol>
       </div>
-      <button onClick={rollSingleDie}>Roll Single Die</button>
-      <button onClick={rollBothDice}>Roll Both Dice</button>
+      <div className='main-game-stats'>
+        <button onClick={rollSingleDie}>Roll One</button>
+        <button onClick={rollBothDice}>Roll Both</button>
+      </div>
+      
     </div>
   );
 };

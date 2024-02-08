@@ -21,26 +21,31 @@ const SkillSection = ({ skill, setSkill, originalSkill, setOriginalSkill, initia
   };
 
   return (
-    <div>
+    <div className='rpgui-container framed-golden'>
       {!initialSkillInputDone && (
-        <div>
+        <div className='main-game-stats'>
           <label>
-            Original Skill: 
+            Skill: 
             <input
               type="number"
               value={originalSkill}
               onChange={handleInputChange}
             />
+            <button onClick={handleInputSubmit}> > </button>
           </label>
-          <button onClick={handleInputSubmit}>Submit Initial Skill</button>
+          
         </div>
       )}
       {initialSkillInputDone && (
-        <div>
-          <h3>Current Skill: {skill}</h3>
-          <p>Skill Level: {originalSkill}</p>
-          <button onClick={handleIncrease} disabled={skill === originalSkill}>Increase Skill</button>
-          <button onClick={handleDecrease} disabled={skill === 0}>Decrease Skill</button>
+        <div className='main-game-stats-2'>
+          <h2>Skill</h2>
+          <h1>{skill}</h1>
+          {/* <br></br>
+          <p>Original Skill: {originalSkill}</p> */}
+          <div>
+          <button onClick={handleDecrease} disabled={skill === 0}>-</button>
+          <button onClick={handleIncrease} disabled={skill === originalSkill}>+</button>
+          </div>
         </div>
       )}
     </div>

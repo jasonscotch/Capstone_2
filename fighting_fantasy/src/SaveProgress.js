@@ -1,15 +1,40 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useAuth } from "./AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useGame } from "./GameContext";
+
 
 const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3001";
 
-const SaveProgress = ({ inCombat, storyId, chapterId, gameState, inventory, itemsAvailable, loadId, setLoadId }) => {
+const SaveProgress = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
-  const goHome = () => {
-    navigate('/');
+
+  const { 
+    inCombat, 
+    inventoryItems, 
+    itemsAvailable, 
+    setProgressId, 
+    setLoadId, 
+    gold, 
+    stamina, 
+    originalStamina, 
+    skill, 
+    originalSkill, 
+    luck, 
+    originalLuck, 
+    remainingProvisions,
+    data  
+  } = useGame();
+  
+  const gameState = {
+    gold,
+    current_stamina: stamina,
+    original_stamina: originalStamina,
+    current_skill: skill,
+    original_skill: originalSkill,
+    current_luck: luck,
+    original_luck: originalLuck,
+    remaining_provisions: remainingProvisions
   };
 
   const [showSaveInput, setShowSaveInput] = useState(false);
@@ -26,7 +51,7 @@ const SaveProgress = ({ inCombat, storyId, chapterId, gameState, inventory, item
       setSaving(true);
       const response = await axios.post(
         `${BASE_URL}/save-progress`,
-        { userId: user.id, storyId, chapterId, gameState: JSON.stringify(gameState), inventory: JSON.stringify(inventory), saveName },
+        { userId: user.id, storyId: data.story_id, chapterId: data.chapter_id, gameState: JSON.stringify(gameState), inventory: JSON.stringify(inventoryItems), saveName },
         {
           headers: {
             Authorization: `Bearer ${user.token}`,
@@ -34,9 +59,10 @@ const SaveProgress = ({ inCombat, storyId, chapterId, gameState, inventory, item
         }
       );
       // Handle the response accordingly (e.g., show success message)
-      console.log(response.data.savedProgress);
+    //   console.log(response.data.savedProgress);
       const game = response.data.savedProgress;
-      setLoadId(response.data.savedProgress);
+      console.log(game);
+      setProgressId(game.id);
       setShowSaveInput(false);
 
     } catch (error) {
@@ -47,12 +73,11 @@ const SaveProgress = ({ inCombat, storyId, chapterId, gameState, inventory, item
     }
   };
 
+  const cancel = () => setShowSaveInput(false);
+
   return (
-    <div>
-      <button disabled={inCombat || itemsAvailable} onClick={handleSave}>
-        SAVE
-      </button>
-      {showSaveInput && (
+    <div >
+      {showSaveInput ? (
         <div>
           <label>
             Save Name:
@@ -62,13 +87,17 @@ const SaveProgress = ({ inCombat, storyId, chapterId, gameState, inventory, item
               onChange={(e) => setSaveName(e.target.value)}
             />
           </label>
+          <button onClick={cancel}>CANCEL</button>
           <button onClick={handleSaveConfirm} disabled={saving}>
-            {saving ? 'Saving...' : 'Save'}
+            {saving ? 'SAVING...' : 'SAVE'}
           </button>
           {saveError && <p style={{ color: 'red' }}>{saveError}</p>}
         </div>
+      ) : (
+        <button disabled={inCombat || itemsAvailable} onClick={handleSave}>
+        SAVE
+      </button>
       )}
-      <button onClick={goHome}>HOME</button>
     </div>
   );
 };

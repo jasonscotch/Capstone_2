@@ -20,8 +20,8 @@ const Inventory = ({ inventoryItems, setInventoryItems }) => {
   };
 
   return (
-    <div className='inventory'>
-      <h3>Inventory</h3>
+    <div className='inventory' style={{maxHeight: '20vh', overflowY: 'auto' }}>
+      <h4>Inventory</h4>
       <ul>
         {inventoryItems.map((item, index) => (
           <li key={index} onClick={() => {
@@ -30,11 +30,11 @@ const Inventory = ({ inventoryItems, setInventoryItems }) => {
               editItem(index, editedValue);
             }
           }}>
-            {item.item_name} - {item.description || item.effect_name}
+            <strong>{item.item_name}</strong> - {item.description || item.effect_name}
           </li>
         ))}
       </ul>
-      <div>
+      <div className='rpgui-container framed-grey'>
         <input
           type="text"
           placeholder="Type item name..."
